@@ -4,18 +4,23 @@ const port = 3000;
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
-  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Type', 'application/json; charset=utf-8'); // Türkçe karakter desteği için utf-8 ekledik
   
-  // Gelen isteğe göre farklı cevaplar dönelim (Basit bir yönlendirme)
   if (req.url === '/selam') {
-    res.end(JSON.stringify({ mesaj: "Merhaba! Servis çalışıyor." }));
+    res.end(JSON.stringify({ mesaj: "Selamlar Fırat! Servis artık bulutta ve güncel." }));
   } else if (req.url === '/saat') {
-    res.end(JSON.stringify({ su_an: new Date().toLocaleString() }));
+    // Türkiye saat dilimine göre formatlama yapıyoruz
+    const turkiyeSaati = new Date().toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" });
+    
+    res.end(JSON.stringify({ 
+      lokasyon: "İstanbul / Türkiye",
+      su_an: turkiyeSaati 
+    }));
   } else {
     res.end(JSON.stringify({ hata: "Sayfa bulunamadı." }));
   }
 });
 
 server.listen(port, () => {
-  console.log(`Servis mutfağı hazır! http://localhost:${port} adresinden ulaşabilirsin.`);
+  console.log(`Servis mutfağı 3000 portunda güncellendi!`);
 });
